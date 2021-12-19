@@ -119,27 +119,28 @@ int main()
   catalogue.AjouterUnTrajet(ptTS1);*/
   //catalogue.AffichageCatalogue();
   //cout <<"FIN DEMO"<< endl; 
-  char lecture[100] ="Probleme";
-  char lectureDepart[100] ="Probleme";
-  char lectureArrivee[100] ="Probleme";
+  char lecture[100] ="_";
+  char lectureDepart[100] ="_";
+  char lectureArrivee[100] ="_";
   char stockChar[100];
-  char lectureLocomotion[100] ="Probleme";
-
-  cout << endl << "Imprimer Catalogue : Ecrivez \"Catalogue\"" << endl;
-  cout << "Ajouter un Trajet Simple : Ecrivez \"Simple\"" << endl;
-  cout << "Ajouter un Trajet Complexe : Ecrivez \"Complexe\"" << endl;
-  cout << "Chercher un Trajet : Ecrivez \"Chercher\"" << endl;
-  cout << "Charger une sauvegarde : Ecrivez \"Charger\"" << endl;
-  cout << "Sauvegarder les trajets actuels : Ecrivez \"Sauvegarder\"" << endl;
-  cout << "Quitter : Ecrivez \"Quit\"" << endl << endl;
+  char lectureLocomotion[100] ="_";
+  char lectureModeChargement[100] ="_";
+  cout << "Ecrivez le chiffre correspondant à l'action voulue"<<endl;
+  cout << "1 -Imprimer Catalogue" << endl;
+  cout << "2 -Ajouter un Trajet Simple" << endl;
+  cout << "3 -Ajouter un Trajet Complexe" << endl;
+  cout << "4 -Chercher un Trajet" << endl;
+  cout << "5 -Charger une sauvegarde" << endl;
+  cout << "6 -Sauvegarder des trajets actuels" << endl;
+  cout << "q -Quitter l'application" << endl << endl;
 
   lireLigne(lecture);
-  while (strcmp(lecture, "Quit") != 0) {
+  while (strcmp(lecture, "q") != 0) {
     
-    if (strcmp(lecture, "Catalogue") == 0) {
+    if (strcmp(lecture, "1") == 0) {
       catalogue.AffichageCatalogue();
 
-    } else if (strcmp(lecture, "Simple") == 0) {
+    } else if (strcmp(lecture, "2") == 0) {
       cout << "Entrez un départ : " << endl;
       lireLigne(lectureDepart);
 
@@ -152,7 +153,7 @@ int main()
       Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
       catalogue.AjouterUnTrajet(ptTS1);
 
-    } else if (strcmp(lecture, "Complexe") == 0) {
+    } else if (strcmp(lecture, "3") == 0) {
       cout << "Entrez un départ : " << endl;
       lireLigne(lectureDepart);
 
@@ -186,7 +187,7 @@ int main()
       ptTC1 -> AjouterTC(ptTS);
       catalogue.AjouterUnTrajet(ptTC1);
 
-    } else if (strcmp(lecture, "Chercher") == 0) {
+    } else if (strcmp(lecture, "4") == 0) {
 
       char lectureDepart[100];
       char lectureArrivee[100];
@@ -199,19 +200,35 @@ int main()
 
       catalogue.Chercher(lectureDepart, lectureArrivee);
 
-    } else if (strcmp(lecture, "Charger") == 0) {
-      cout << "Entrez le nom du fichier sauvegarde à charger :" << endl;
-      lireLigne(stockChar);
-      catalogue.Charger(stockChar);
-      
-    }else if (strcmp(lecture, "Sauvegarder") == 0) {
+
+
+
+    } else if (strcmp(lecture, "5") == 0) {
+      cout << "Voulez-vous faire un chargement avec critères de sélection ? (Y/N)" << endl;
+      lireLigne(lectureModeChargement);
+      if(strcmp(lectureModeChargement,"Y") == 0){
+        cout << "Vous voulez faire un chargement en fonction de :\n    Du type de trajet :\n        S -pour des trajets Simples\n        C -pour des trajets Complexes\n    D -De la ville de départ\n    A -De la ville d'arrivée\n    AD -Des villes de départ et d'arrivée \n    I -De l'intervalle de trajets"<< endl;
+        lireLigne(lectureModeChargement);
+        cout << "Entrez le nom du fichier sauvegarde à charger :" << endl;
+        lireLigne(stockChar);
+        catalogue.Charger(stockChar, lectureModeChargement);
+      }else if(strcmp(lectureModeChargement,"N")==0){
+        cout << "Entrez le nom du fichier sauvegarde à charger :" << endl;
+        lireLigne(stockChar);
+        catalogue.Charger(stockChar,"T");
+      }
+
+
+
+
+    }else if (strcmp(lecture, "6") == 0) {
 
       char condition[100];
 
-      cout << "Voulez-vous faire une sauvegarde conditionnelle ? (Y/N)" << endl;
+      cout << "Voulez-vous faire une sauvegarde avec critères de sélection ? (Y/N)" << endl;
       lireLigne(condition);
       if (strcmp(condition,"Y")==0){
-        cout << "Voulez-vous faire une sauvegarde en fonction :\n    Du type de trajet :\n        Entrez \"S\" pour des trajets Simples\n        Entrez \"C\" pour des trajets Complexes\n    De la ville de départ : Entrez \"D\"\n    De la ville d'arrivée : Entrez \"A\"\n    De l'intervalle de trajets : Entrez \"I\""<< endl << endl;
+        cout << "Vous voulez faire une sauvegarde en fonction de :\n    Du type de trajet :\n        S -pour des trajets Simples\n        C -pour des trajets Complexes\n    D -De la ville de départ\n    A -De la ville d'arrivée\n    AD -Des villes de départ et d'arrivée\n    I -De l'intervalle de trajets"<< endl << endl;
         lireLigne(condition);
         if(strcmp(condition,"D")==0){
           cout << "Quel départ voulez-vous enregistrer ?" << endl;
@@ -219,6 +236,17 @@ int main()
           lireLigne(depart);
           strcat(condition,depart);
         }else if(strcmp(condition,"A")==0){
+          cout << "Quel arrivée voulez-vous enregistrer ?" << endl;
+          char arrivee[100];
+          lireLigne(arrivee);
+          strcat(condition,arrivee);
+        
+        }else if(strcmp(condition,"AD")==0){
+          cout << "Quel départ voulez-vous enregistrer ?" << endl;
+          char depart[100];
+          lireLigne(depart);
+          strcat(condition,depart);
+          strcat(condition,",");
           cout << "Quel arrivée voulez-vous enregistrer ?" << endl;
           char arrivee[100];
           lireLigne(arrivee);
@@ -250,15 +278,14 @@ int main()
     } else {
       cout << "Commande/Requête non reconnue\n\n" << endl;
     }
-    cout << endl << "Imprimer Catalogue : Ecrivez \"Catalogue\"" << endl;
-    cout << "Ajouter un Trajet Simple : Ecrivez \"Simple\"" << endl;
-    cout << "Ajouter un Trajet Complexe : Ecrivez \"Complexe\"" << endl;
-    cout << "Chercher un Trajet : Ecrivez \"Chercher\"" << endl;
-    cout << "Charger une sauvegarde : Ecrivez \"Charger\"" << endl;
-    cout << "Sauvegarder les trajets actuels : Ecrivez \"Sauvegarder\"" << endl;
-    cout << "Quitter : Ecrivez \"Quit\"" << endl << endl;
-
-    
+    cout << endl << "Ecrivez le chiffre correspondant à l'action voulue"<<endl;
+    cout << "1 -Imprimer Catalogue" << endl;
+    cout << "2 -Ajouter un Trajet Simple" << endl;
+    cout << "3 -Ajouter un Trajet Complexe" << endl;
+    cout << "4 -Chercher un Trajet" << endl;
+    cout << "5 -Charger une sauvegarde" << endl;
+    cout << "6 -Sauvegarder des trajets" << endl;
+    cout << "q -Quitter" << endl << endl;
     lireLigne(lecture);
   }
   return 0;

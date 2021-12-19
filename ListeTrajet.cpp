@@ -153,56 +153,60 @@ using namespace std;
     return sizeListe;
   }
    
-  void ListeTrajet::Charger(ifstream & monfic){
+  void ListeTrajet::Charger(ifstream & monfic, string mode){
     char * buffer = new char[100];
-    cout << "DEBUT BUFFER" << endl;
     monfic.getline(buffer,100, ';');
     while(!monfic.eof()){
-      cout<< buffer <<endl;
-      cout<< "bloque" << endl;
-      if(strcmp(buffer,"Simple")==0){
+      if(strcmp(buffer,"Simple")==0 || strcmp(buffer,"\nSimple")==0){
         char lectureDepart[100]; 
         monfic.getline(buffer,100, ';');
         strcpy(lectureDepart,buffer);
+        // cout<< "Simple depart " << buffer <<endl;
         char lectureArrivee[100]; 
         monfic.getline(buffer,100, ';');
         strcpy(lectureArrivee,buffer);
+        // cout<< "Simple arrivee " << buffer <<endl;
         char lectureLocomotion[100]; 
         monfic.getline(buffer,100, ';');
         strcpy(lectureLocomotion,buffer);
+        // cout<< "Simple locomotion " << buffer <<endl;
         Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
         this->Ajouter(ptTS1);
         monfic.getline(buffer,100);
-        monfic.getline(buffer,100); // 2 fois ??
-      } else if(strcmp(buffer,"Complexe")==0){
+        monfic.getline(buffer,100,';');
+      } else if(strcmp(buffer,"Complexe")==0 || strcmp(buffer,"\nComplexe")==0){
           
-      //     char lectureDepart[100]; 
-      //     monfic.getline(buffer,100, ';');
-      //     strcpy(lectureDepart,buffer);
-      //     char lectureArrivee[100]; 
-      //     monfic.getline(buffer,100, ';');
-      //     strcpy(lectureArrivee,buffer);
-      //     TC * ptTC1 = new TC(lectureDepart, lectureArrivee);
-      //     while(strcmp(buffer,"\n[]")!=0 && strcmp(buffer,"[]")!=0 ){
-      //       cout<<buffer<<endl;
-      //       char lectureDepart[100]; 
-      //       monfic.getline(buffer,100, ';');
-      //       strcpy(lectureDepart,buffer);
-      //       char lectureArrivee[100]; 
-      //       monfic.getline(buffer,100, ';');
-      //       strcpy(lectureArrivee,buffer);
-      //       char lectureLocomotion[100]; 
-      //       monfic.getline(buffer,100, ';');
-      //       strcpy(lectureLocomotion,buffer);
-      //       TS * ptTS = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
-      //       ptTC1 -> AjouterTC(ptTS);
-      //     }
-      //     this->Ajouter(ptTC1);
-        
+          char lectureDepart[100]; 
+          monfic.getline(buffer,100, ';');
+          strcpy(lectureDepart,buffer);
+          // cout<<"TOTAL Depart: " << buffer<<endl;
+          char lectureArrivee[100]; 
+          monfic.getline(buffer,100, ';');
+          strcpy(lectureArrivee,buffer);
+          // cout<<"TOTAL ARRIVEE " << buffer<<endl;
+          TC * ptTC1 = new TC(lectureDepart, lectureArrivee);
+          monfic.getline(buffer,100, ';');//Buffer apres l'arrivee total
+          while(strcmp(buffer,"\nComplexe")!=0 && strcmp(buffer,"\nSimple")!=0){
+            // cout<<"depart sous trajet" << buffer<<endl;
+            char lectureDepart[100]; 
+            strcpy(lectureDepart,buffer);
+            char lectureArrivee[100]; 
+            monfic.getline(buffer,100, ';');
+            strcpy(lectureArrivee,buffer);
+            // cout<<"arrivee sous trajet" << buffer<<endl;
+            char lectureLocomotion[100]; 
+            monfic.getline(buffer,100, ';');
+            strcpy(lectureLocomotion,buffer);
+            // cout<<"locomotion sous trajet" << buffer<<endl;
+            TS * ptTS = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+            ptTC1 -> AjouterTC(ptTS);
+            monfic.getline(buffer,100, ';');
+          }
+          this->Ajouter(ptTC1);
       }
     }
     delete[] buffer;
-    cout << "FIN BUFFER" << endl;
+    // cout << "FIN BUFFER" << endl;
   }
 
 

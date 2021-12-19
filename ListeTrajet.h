@@ -84,7 +84,7 @@ int getSize();
 
 
 
-void Charger(ifstream & monfic);
+void Charger(ifstream & monfic, string mode);
 // Mode d'emploi :
 // 
 // Contrat : Pas de contrat

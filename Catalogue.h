@@ -68,7 +68,7 @@ void Chercher(const char * Depart, const char * Arrivee);
 // Contrat :
 // Entrer un Départ et une Arrivee qui sont des tableaux de char constants se terminant par \0
 
-void Charger(const char * nomCharge);
+void Charger(const char * nomCharge, const char * nomMode);
 // Mode d'emploi : 
 // Charger un fichier existant 
 // Contrat :

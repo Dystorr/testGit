@@ -64,25 +64,40 @@ void Catalogue::Chercher(const char * Depart, const char * Arrivee)
   maListeTrajet.Chercher(Depart, Arrivee);
 }
 
-void Catalogue::Charger(const char * nomCharge){
+
+
+//PARTIE CHARGEMENT 
+void Catalogue::Charger(const char * nomCharge, const char * mode){
   string nomFichierSauvegarde = (string) nomCharge;
+  string modeSelectionne = (string) mode;
+  cout << "MODE DE SELECTION:"<<modeSelectionne << endl;
   nomFichierSauvegarde = nomFichierSauvegarde + ".csv";
   //cout << "STRING "<< nomFichierSauvegarde << endl;
   ifstream fic;
   fic.open(nomFichierSauvegarde);
   if(!fic){
-    cerr << "Erreur d'ouverture du fichier " << nomCharge << endl;
+    cerr << "Erreur -> Le fichier" << nomCharge << " est introuvable\n" << endl;
     fic.close();
     return;
+  } else if(modeSelectionne!="S" && modeSelectionne!="D" && modeSelectionne!="A" && modeSelectionne!="AD" && modeSelectionne!="C" && modeSelectionne!="I"){
+    // Traiter l'exception où le mode n'existe pas
+    cerr << "Erreur -> Le mode de chargement "<< mode << " est invalide\n" << endl;
+    return;
   }
-  cout << "Fichier existant" <<endl;
-  cout << "debut charger liste" <<endl;
-  maListeTrajet.Charger(fic);
-  cout << "fin charger liste" << endl;
+
+  // cout << "debut charger liste" <<endl;
+  maListeTrajet.Charger(fic, modeSelectionne);
+  // cout << "fin charger liste" << endl;
   fic.close();
   size = maListeTrajet.getSize();
+  cout << "Fichier existant et chargé correctement" <<endl;
 }
 
+
+
+
+
+//PARTIE SAUVEGARDE
 void Catalogue::Sauvegarder(const char * nomSauvegarde, const char * condition)
 {
   string nomFichierSauvegarde = (string) nomSauvegarde;
@@ -101,6 +116,7 @@ void Catalogue::Sauvegarder(const char * nomSauvegarde, const char * condition)
       buffer=(texteSauvegarde.substr(start, end - start));
       if(buffer.find("Simple",0)<100){
         nvTexte+=buffer;
+        nvTexte+="\n";
       }
       start=end+1;
     }
@@ -116,6 +132,7 @@ void Catalogue::Sauvegarder(const char * nomSauvegarde, const char * condition)
       buffer=(texteSauvegarde.substr(start, end - start));
       if(buffer.find("Complexe",0)<100){
         nvTexte+=buffer;
+        nvTexte+="\n";
       }
       start=end+1;
     }
@@ -132,11 +149,12 @@ void Catalogue::Sauvegarder(const char * nomSauvegarde, const char * condition)
       buffer=(texteSauvegarde.substr(start, end - start));
       if(buffer.find("Simple;"+depart,0)<100 || buffer.find("Complexe;"+depart,0)<100){
         nvTexte+=buffer;
+        nvTexte+="\n";
       }
       start=end+1;
     }
     cout << nvTexte << endl;
-  }else if(condition[0]=='A'){
+  }else if(condition[0]=='A' && condition[1]!='D'){
     string nvTexte;
     string buffer;
     unsigned int start = 0;
@@ -148,6 +166,28 @@ void Catalogue::Sauvegarder(const char * nomSauvegarde, const char * condition)
       buffer=(texteSauvegarde.substr(start, end - start));
       if( !(buffer.find("Simple;"+arrivee,0)<100 || buffer.find("Complexe;"+arrivee,0)<100) &&(buffer.find(arrivee,0)<100)){
         nvTexte+=buffer;
+        nvTexte+="\n";
+      }
+      start=end+1;
+    }
+    cout << nvTexte << endl;
+  }else if(condition[0]=='A' && condition[1]=='D'){
+    string nvTexte;
+    string buffer;
+    unsigned int start = 0;
+    unsigned int end = 0;
+    string depart=(string) condition;
+    string arrivee=(string) condition;
+    depart=depart.substr(2,depart.find(",")-2);
+    arrivee=arrivee.substr(arrivee.find(",")+1,arrivee.length());
+    while (start!= texteSauvegarde.length()){
+      end = texteSauvegarde.find('\n', start);
+      buffer=(texteSauvegarde.substr(start, end - start));
+      if(buffer.find("Simple;"+depart,0)<100 || buffer.find("Complexe;"+depart,0)<100){
+        if( !(buffer.find("Simple;"+arrivee,0)<100 || buffer.find("Complexe;"+arrivee,0)<100) &&(buffer.find(arrivee,0)<100)){
+          nvTexte+=buffer;
+          nvTexte+="\n";
+        }
       }
       start=end+1;
     }
