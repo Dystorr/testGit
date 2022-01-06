@@ -72,7 +72,8 @@ void setNext(MaillonTrajet * next);
 
 string LigneSauvegarde();
 // Mode d'emploi : 
-// Renvoi du string au format de sauvegarde du trajet contenu
+// Renvoi du string au format de sauvegarde du 
+//   trajet contenu
 // Contrat : Pas de contrat
 
 protected:

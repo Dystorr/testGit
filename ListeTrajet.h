@@ -84,7 +84,7 @@ int getSize();
 
 
 
-void Charger(ifstream & monfic, string mode);
+void Charger(ifstream & monfic, string mode, string param1, string param2);
 // Mode d'emploi :
 // 
 // Contrat : Pas de contrat
@@ -92,7 +92,8 @@ void Charger(ifstream & monfic, string mode);
 
 string TexteSauvegarde();
 // Mode d'emploi : 
-// Renvoie le texte à écrire dans le fichier de sauvegarde
+// Renvoie le texte à écrire dans le fichier de 
+//  sauvegarde
 // Contrat : Pas de contrat
 
 protected:

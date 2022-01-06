@@ -68,19 +68,39 @@ void Chercher(const char * Depart, const char * Arrivee);
 // Contrat :
 // Entrer un Départ et une Arrivee qui sont des tableaux de char constants se terminant par \0
 
-void Charger(const char * nomCharge, const char * nomMode);
+void Charger(const char * nomCharge, const char * nomMode, const char* parametre1, const char* parametre2);
 // Mode d'emploi : 
 // Charger un fichier existant 
 // Contrat :
 // Il faut que le nom nomCharge renseigne soit valide sinon erreur
 
+string ModeChargement(const char * mode);
+// Mode d'emploi : 
+// Verifie le mode de chargement
+// Contrat :
+// 
+bool ModeIntervalle (const char* n, const char* m);
+// Mode d'emploi : 
+// Verifie la cohérence de l'intervalle pour le chargement
+// Contrat :
+// 
+
+
 void Sauvegarder(const char * nomSauvegarde,const char * condition);
 // Mode d'emploi : 
-// Entrer le nom de sauvegarde
-// La sauvegarde est écrasée si le nom existe déjà
+// Entrer le nom de sauvegarde et la condition
+// La sauvegarde est proposée d'être) écrasée si le 
+    // nom existe déjà
 // Contrat : 
-// Entrer un nom de fichier accepté par le système
-// d'exploitation 
+//   nomSauvegarde : Entrer un nom de fichier 
+//    accepté par le système d'exploitation
+//   condition :
+//    N ou C ou S ou
+//    D suivi d'une virgule et du nom du Départ
+//    A suivi d'une virgule et du nom d'arrivée
+//    AD suivi d'une virgule, du nom du départ, 
+//      d'une autre virgule, du nom d'arrivee
+
 
 
 const void AffichageCatalogue();

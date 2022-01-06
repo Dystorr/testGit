@@ -53,7 +53,9 @@ Trajet::~Trajet(){
 } //----- fin de Trajet::~Trajet
  
 const void Trajet::Affichage(){
-  cout << "***********************************" <<endl;
+  cout.width(70);
+  cout.fill('*');
+  cout << left << "*" << endl;
   cout <<"  " <<Depart << " -> " << Arrivee << endl;
 } //----- fin de Trajet::Affichage
 

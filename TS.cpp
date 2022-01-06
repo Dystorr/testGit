@@ -66,7 +66,9 @@ const void TS::Affichage()
 {
   Trajet::Affichage();
   cout<< "    Moyen de transport: "<< Locomotion << endl; 
-  cout << "***********************************" <<endl;
+  cout.width(70);
+  cout.fill('*');
+  cout << "*" <<endl;
 }
 
 string TS::LigneSauvegarde()

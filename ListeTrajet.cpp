@@ -76,8 +76,11 @@ using namespace std;
   const void ListeTrajet::Affichage(){
     MaillonTrajet * ptrMaillon = Head;
     for (int i=0;i<sizeListe;i++){
-      cout << "\n-------------------------------------------" << endl;
-      cout << "-------------------------------------------\n" << endl;
+      cout<< endl;
+      cout.width(70);
+       cout.fill('-');
+      cout << left<< "-" << endl;
+      cout<< endl;
       ptrMaillon->Affichage();
       ptrMaillon = ptrMaillon->getNext();
     }
@@ -106,6 +109,7 @@ using namespace std;
       ptrMaillon->Affichage();
       aff=true;
     }
+    ptrMaillon = ptrMaillon->getNext();
     while (i<sizeListe){
 
       c1=strcmp(Depart, ptrMaillon->getDepart());
@@ -153,11 +157,13 @@ using namespace std;
     return sizeListe;
   }
    
-  void ListeTrajet::Charger(ifstream & monfic, string mode){
+  void ListeTrajet::Charger(ifstream & monfic, string mode, string param1, string param2){
     char * buffer = new char[100];
     monfic.getline(buffer,100, ';');
+    int nbTrajetParcouru = 0;
     while(!monfic.eof()){
-      if(strcmp(buffer,"Simple")==0 || strcmp(buffer,"\nSimple")==0){
+      if((strcmp(buffer,"Simple")==0 || strcmp(buffer,"\nSimple")==0)){
+        nbTrajetParcouru++;
         char lectureDepart[100]; 
         monfic.getline(buffer,100, ';');
         strcpy(lectureDepart,buffer);
@@ -170,19 +176,45 @@ using namespace std;
         monfic.getline(buffer,100, ';');
         strcpy(lectureLocomotion,buffer);
         // cout<< "Simple locomotion " << buffer <<endl;
-        Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
-        this->Ajouter(ptTS1);
+        if(mode=="T" || mode=="S"){
+          Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+          this->Ajouter(ptTS1);
+        }
+        else if(mode=="D" && param1==(string) lectureDepart){
+          Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+          this->Ajouter(ptTS1);
+        }
+        else if(mode=="A" && param2==(string) lectureArrivee){
+          Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+          this->Ajouter(ptTS1);
+        }
+        else if(mode=="AD" && param1==(string) lectureDepart && param2==(string) lectureArrivee){
+          Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+          this->Ajouter(ptTS1);
+        }
+        else if(mode=="I"){
+          int numeron = stoi(param1);
+          int numerom = stoi(param2);
+          if(nbTrajetParcouru<=numerom && nbTrajetParcouru>=numeron){
+            Trajet * ptTS1 = new TS(lectureDepart, lectureArrivee, lectureLocomotion);
+            this->Ajouter(ptTS1);
+          }
+        }
         monfic.getline(buffer,100);
         monfic.getline(buffer,100,';');
-      } else if(strcmp(buffer,"Complexe")==0 || strcmp(buffer,"\nComplexe")==0){
-          
+      } else if((strcmp(buffer,"Complexe")==0 || strcmp(buffer,"\nComplexe")==0)){
+          nbTrajetParcouru++;
           char lectureDepart[100]; 
           monfic.getline(buffer,100, ';');
           strcpy(lectureDepart,buffer);
+          char lectureDepartInitiale[100]; 
+          strcpy(lectureDepartInitiale,lectureDepart);
           // cout<<"TOTAL Depart: " << buffer<<endl;
           char lectureArrivee[100]; 
           monfic.getline(buffer,100, ';');
           strcpy(lectureArrivee,buffer);
+          char lectureArriveeFinale[100]; 
+          strcpy(lectureArriveeFinale,lectureArrivee);
           // cout<<"TOTAL ARRIVEE " << buffer<<endl;
           TC * ptTC1 = new TC(lectureDepart, lectureArrivee);
           monfic.getline(buffer,100, ';');//Buffer apres l'arrivee total
@@ -202,7 +234,22 @@ using namespace std;
             ptTC1 -> AjouterTC(ptTS);
             monfic.getline(buffer,100, ';');
           }
-          this->Ajouter(ptTC1);
+
+          if(mode=="T" || mode=="C"){
+            this->Ajouter(ptTC1);
+          }else if(mode=="D" && param1==(string) lectureDepartInitiale){
+            this->Ajouter(ptTC1);
+          }else if(mode=="A" && param2==(string) lectureArriveeFinale){
+            this->Ajouter(ptTC1);
+          }else if(mode=="AD" && param1==(string) lectureDepartInitiale && param2==(string) lectureArriveeFinale){
+            this->Ajouter(ptTC1);
+          }else if(mode=="I"){
+            int numeron = stoi(param1);
+            int numerom = stoi(param2);
+            if(nbTrajetParcouru<=numerom && nbTrajetParcouru>=numeron){
+              this->Ajouter(ptTC1);
+            }
+          }
       }
     }
     delete[] buffer;

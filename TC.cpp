@@ -72,7 +72,7 @@ string TC::LigneSauvegarde()
   string ligneTS = maListeTrajet.TexteSauvegarde();
   //On réutilise la méthode de formatage des trajets simples
   //  prévue pour le catalogue
-  //On reformate le string obtenu pour convenir à notre TC
+  //On reformate le string obtenu pour convenir à notre TCw
   //  ci-dessous
   ligneTS.erase(0,7);
   for(unsigned int i=0; i< ligneTS.size(); i++){
